@@ -4,5 +4,7 @@ project(navchprakt5)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(navchprakt5 main.cpp
-        destinations.cpp
-        destinations.h)
+        destination.cpp
+        destination.h
+        utility.cpp
+        utility.h)
