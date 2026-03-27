@@ -7,4 +7,6 @@ add_executable(navchprakt5 main.cpp
         destination.cpp
         destination.h
         utility.cpp
-        utility.h)
+        utility.h
+        Train.cpp
+        Train.h)
