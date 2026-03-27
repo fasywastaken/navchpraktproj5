@@ -22,7 +22,7 @@ int main() {
 
     cout << endl << "Trains info:" << endl;
     for (int i = 0; i < trainCount; i++) {
-        cout << "From: " << trains[i].getFrom() << " to: " << trains[i].getTo() << " departure: " << trains[i].getTime() << " Price " << trains[i].getPrice() << endl;
+        cout << "From: " << trains[i].getFrom() << " | to: " << trains[i].getTo() << " | departure: " << trains[i].getDeparture() << " | Time in Transit: " << trains[i].getTime() << "h | Price " << trains[i].getPrice() << endl;
     }
 
     string city1; string city2;

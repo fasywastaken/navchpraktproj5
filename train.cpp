@@ -8,8 +8,8 @@
 #include <utility>
 
 // FIX: Actually assign the text file data to the object's variables
-Train::Train(string  from, string  to, string  time, double price)
-    : from(std::move(from)), to(std::move(to)), time(std::move(time)), price(price) {
+Train::Train(string  from, string  to, string departure, double time, double price)
+    : from(std::move(from)), to(std::move(to)), departure(std::move(departure)), time(time), price(price) {
 }
 
 string Train::getFrom() const {
@@ -20,7 +20,10 @@ string Train::getTo() const {
     return to;
 }
 
-string Train::getTime() const {
+string Train::getDeparture() const {
+    return departure;
+}
+double Train::getTime() const {
     return time;
 }
 double Train::getPrice() const {
@@ -35,8 +38,8 @@ void Train::readTrains(Train*& trains, int& trainCount) {
     }
     trainCount=0;
 
-    string from, to, time; double price;
-    while (file >> from >> to >> time >> price) {
+    string from, to, departure; double time, price;
+    while (file >> from >> to >> departure >> time >> price) {
         trainCount++;
     }
     if (trainCount <= 0) {
@@ -49,8 +52,8 @@ void Train::readTrains(Train*& trains, int& trainCount) {
     trains = new Train[trainCount];
 
     for (int i=0; i<trainCount; i++) {
-        file >> from >> to >> time >> price;
-        trains[i] = Train(from, to, time, price);
+        file >> from >> to >> departure >> time >> price;
+        trains[i] = Train(from, to, departure, time, price);
     }
 
 } //Filling in the Array

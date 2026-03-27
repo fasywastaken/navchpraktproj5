@@ -9,14 +9,15 @@ using namespace std;
 
 class Train {
 private:
-    string from; string to; string time; double price{};
+    string from; string to; string departure; double time{}; double price{};
     public:
     Train() = default;
-    Train(string  from, string  to, string  time, double price);
+    Train(string  from, string  to, string  departure,double time, double price);
 
     [[nodiscard]] string getFrom() const;
     [[nodiscard]] string getTo() const;
-    [[nodiscard]] string getTime() const;
+    [[nodiscard]] string getDeparture() const;
+    [[nodiscard]] double getTime() const;
     [[nodiscard]] double getPrice() const;
 
     static void readTrains(Train*& trains, int& trainCount);
