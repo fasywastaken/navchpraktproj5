@@ -1,5 +1,5 @@
 //
-// Created by fasy on 26/3/26.
+// Created by Roman on 26/3/26.
 //
 
 #ifndef NAVCHPRAKT5_UTILITY_H
@@ -11,6 +11,8 @@
 class utility {
     public:
     utility() = default;
+
+    static double haversine(double lt1, double ln1, double lt2, double ln2);
 
     static double haversine(const Destination &d1, const Destination &d2);
 

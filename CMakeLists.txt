@@ -10,5 +10,5 @@ add_executable(navchprakt5 main.cpp
         utility.h
         train.cpp
         train.h
-        dijikstra.cpp
-        dijikstra.h)
+        dijkstra.cpp
+        dijkstra.h)

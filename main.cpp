@@ -1,8 +1,12 @@
+//
+// Created by fasy on 27/3/26.
+//
 #include <iostream>
 #include <fstream>
 #include "destination.h"
 #include "train.h"
 #include "utility.h"
+#include "dijkstra.h"
 
 using namespace std;
 
@@ -22,11 +26,11 @@ int main() {
 
     cout << endl << "Trains info:" << endl;
     for (int i = 0; i < trainCount; i++) {
-        cout << "From: " << trains[i].getFrom() << " | to: " << trains[i].getTo() << " | departure: " << trains[i].getDeparture() << " | Time in Transit: " << trains[i].getTime() << "h | Price " << trains[i].getPrice() << endl;
+        cout << "From: " << trains[i].getFrom() << " | To: " << trains[i].getTo() << " | Departure: " << trains[i].getDeparture()<< " | Duration: " << trains[i].getDuration() << " | Price: " << trains[i].getPrice() << endl;
     }
 
     string city1; string city2;
-    cout <<endl << "Input the first city: "; cin >> city1;
+    cout <<endl << " Input the first city: "; cin >> city1 ;
     cout << "Input the second city: "; cin >> city2;
 
     Destination* d1 = nullptr;
@@ -43,7 +47,12 @@ int main() {
 
     if (d1 != nullptr && d2 != nullptr) {
         double distance = utility::haversine(*d1, *d2);
-        cout <<"The distance is: " <<  distance << "km" << endl;
+        cout <<endl << " The Straight line distance is: " <<  distance << "km" << endl;
+
+        Graph ukrzaliznytsia;
+        Dijkstra googleMaps(ukrzaliznytsia);
+        googleMaps.dijkstra_funct(ukrzaliznytsia, city1, city2); //КРИВІ РЕЙКИ СТРЬОМНІ ШПАЛИ
+
     } else {
         cerr <<"Invalid cities lol" << endl;
     }

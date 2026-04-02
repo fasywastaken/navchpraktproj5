@@ -1,5 +1,5 @@
 //
-// Created by fasy on 20/3/26.
+// Created by Roman on 20/3/26.
 //
 #ifndef NAVCHPRAKT5_DESTINATIONS_H
 #define NAVCHPRAKT5_DESTINATIONS_H
@@ -19,8 +19,8 @@ public:
     [[nodiscard]] double getLatitude() const;
     [[nodiscard]] double getLongitude() const;
 
-    static void readDestinations(Destination*& destinations, int& destCount);
-    static void clearDestinations(Destination*& destinations);
+    static void readDestinations(Destination*& destinations, int& destCount);//avoid memleak
+    static void clearDestinations(const Destination* destinations);
 
     ~Destination() = default;
 };

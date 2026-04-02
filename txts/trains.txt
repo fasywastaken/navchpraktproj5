@@ -1,0 +1,15 @@
+Lviv Kyiv 15:50 6.5 650
+Kyiv Lviv 06:46 6.5 650
+Kyiv Odesa 21:14 9.5 850
+Kyiv Dnipro 06:02 6.0 550
+Kyiv Kharkiv 06:33 4.8 450
+Kharkiv Kyiv 18:31 4.8 450
+Dnipro Kyiv 17:15 6.0 550
+Dnipro Zaporizhzhia 09:12 2.0 150
+Odesa Kyiv 21:28 9.5 850
+Odesa Kherson 16:45 5.5 200
+Zaporizhzhia Dnipro 18:00 2.0 150
+Kherson Odesa 09:30 5.5 200
+Kherson Zaporizhzhia 14:15 8.0 300
+
+

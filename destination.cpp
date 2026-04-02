@@ -1,5 +1,5 @@
 //
-// Created by fasy on 20/3/26.
+// Created by Roman on 20/3/26.
 //
 #include "destination.h"
 #include <iostream>
@@ -47,9 +47,6 @@ void Destination::readDestinations(Destination*& destinations,int& destCount) {
     }
 } //Filling in the Array
 
-void Destination::clearDestinations(Destination*& destinations) {
-    if (destinations != nullptr) {
-        delete[] destinations;
-        destinations = nullptr;
-    }
+void Destination::clearDestinations(const Destination* destinations) {
+    delete[] destinations;
 } //Clearing the Array
