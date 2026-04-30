@@ -118,7 +118,11 @@ Graph::Graph() : nodeCount(0), edgeCount(0) {
                     if (dist < 1.0) { //We walk
                         edges[edgeCount++] = new Edge(nodes[i], nodes[j], "-", dist / 5.0, 0.0, "Walk");
                     } else { //We drive
-                        edges[edgeCount++] = new Edge(nodes[i], nodes[j], "-", dist / 80.0, dist * 10.0, "Car");
+                        double fuelPrice = 72.39;
+                        double consumptionPer100km = 8.0;
+                        double costPerKm = fuelPrice * (consumptionPer100km / 100.0);
+
+                        edges[edgeCount++] = new Edge(nodes[i], nodes[j], "-", dist / 80.0, dist * costPerKm, "Car");
                     }
                 }
             }
