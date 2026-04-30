@@ -9,13 +9,14 @@
 #include <cmath>
 
 using namespace std;
-
+class Edge;
 class Node {
     string name;
     double lat{}, lon{};
     double distance=INFINITY;
     double incomingDuration{};
     Node* parent=nullptr;
+    Edge* parentEdge=nullptr;
     bool isMarked=false;
 
 public:
@@ -28,11 +29,13 @@ public:
     [[nodiscard]] double getDistance() const;
     [[nodiscard]] double getIncomingDuration() const;
     [[nodiscard]] Node *getParent() const;
+    [[nodiscard]] Edge *getParentEdge() const;
     [[nodiscard]] bool getMarked() const;
 
     void setDistance(double d);
     void setIncomingDuration(double d);
     void setParent(Node* p);
+    void setParentEdge(Edge* p);
     void setMarked(bool m);
 
     ~Node() = default;
@@ -44,15 +47,17 @@ class Edge {
     string dep_time;
     double duration{};
     double price{};
+    string type;
 
 public:
     Edge() = default;
-    Edge(Node* from, Node* to, string  dep_time, double duration, double price);
+    Edge(Node* from, Node* to, string  dep_time, double duration, double price, string type = "Train");
 
     [[nodiscard]] Node *getFrom() const;
     [[nodiscard]] Node *getTo() const;
     [[nodiscard]] double getDuration() const;
     [[nodiscard]] double getPrice() const;
+    [[nodiscard]] string getType() const;
 
     virtual ~Edge() = default;
 };

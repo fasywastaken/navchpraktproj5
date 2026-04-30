@@ -30,8 +30,8 @@ int main() {
     }
 
     string city1; string city2;
-    cout <<endl << " Input the first city: "; cin >> city1 ;
-    cout << "Input the second city: "; cin >> city2;
+    cout <<endl << " Input the first destination: "; cin >> city1 ;
+    cout << "Input the second destination: "; cin >> city2;
 
     Destination* d1 = nullptr;
     Destination* d2 = nullptr;

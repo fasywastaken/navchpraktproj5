@@ -12,7 +12,8 @@
 using namespace std;
 
 //Node
-Node::Node(string name, const double lat, const double lon) : name{std::move(name)}, lat{lat}, lon{lon} {}
+Node::Node(string name, const double lat, const double lon)
+    : name{std::move(name)}, lat{lat}, lon{lon} {}
 
 string Node::getName() const {return name;}
 double Node::getLatitude() const {return lat;}
@@ -21,19 +22,23 @@ double Node::getDistance() const {return distance;}
 double Node::getIncomingDuration() const {return incomingDuration;}
 bool Node::getMarked() const {return isMarked;}
 Node* Node::getParent() const {return parent;}
+Edge* Node::getParentEdge() const {return parentEdge;}
 
 void Node::setDistance(const double new_distance) {distance = new_distance;}
 void Node::setIncomingDuration(double new_duration) {incomingDuration = new_duration;}
 void Node::setParent(Node* new_parent) {parent = new_parent;}
+void Node::setParentEdge(Edge* new_parent_edge) {parentEdge = new_parent_edge;}
 void Node::setMarked(const bool m) {isMarked = m;}
 
 //Edge
-Edge::Edge(Node *from, Node *to, string dep_time,const double duration, const double price): from{from}, to{to}, dep_time {std::move(dep_time)}, duration{duration}, price{price} {}
+Edge::Edge(Node *from, Node *to, string dep_time, const double duration, const double price, string type)
+    : from{from}, to{to}, dep_time{std::move(dep_time)}, duration{duration}, price{price}, type{std::move(type)} {}
 
 Node* Edge::getFrom() const {return from;}
 Node* Edge::getTo() const {return to;}
 double Edge::getDuration() const {return duration;};
 double Edge::getPrice() const {return price;}
+string Edge::getType() const {return type;}
 
 //Graph
 
@@ -65,6 +70,7 @@ Graph::Graph() : nodeCount(0), edgeCount(0) {
         }
         destfile.close();
     }
+
     //trains
     fstream trainfile("trains.txt");
     if (!trainfile.is_open()) {
@@ -73,23 +79,50 @@ Graph::Graph() : nodeCount(0), edgeCount(0) {
     } else {
         string from, to, dep_time;
         double duration, price;
-        int i = 0;
-        while (trainfile >> from >> to >> dep_time >> duration >> price) {++edgeCount;}
-        edges = new Edge *[edgeCount]();
+        int trainEdges = 0;
+        while (trainfile >> from >> to >> dep_time >> duration >> price) {++trainEdges;}
 
-        trainfile.close(); trainfile.open("trains.txt");
+        int maxEdges = trainEdges + nodeCount * (nodeCount - 1);
+        edges = new Edge *[maxEdges]();
+        edgeCount = 0;
+
+        trainfile.clear(); trainfile.seekg(0, ios::beg);
         while (trainfile >> from >> to >> dep_time >> duration >> price) {
             Node* startNode = findNode(from);
             Node* toNode = findNode(to);
 
             if (startNode != nullptr && toNode != nullptr) {
-                edges[i] = new Edge(startNode, toNode, dep_time, duration, price);
-                i++;
+                edges[edgeCount++] = new Edge(startNode, toNode, dep_time, duration, price, "Train");
             } else {
                 cerr << "Dijkstra ignored train: " << startNode <<" -> "<<toNode;
             }
         }
         trainfile.close();
+
+        //!train (cringe) logic
+        for (int i = 0; i < nodeCount; i++) {
+            for (int j = 0; j < nodeCount; j++) {
+                if (i == j) continue;
+
+                bool hasTrain = false;
+                for (int k = 0; k < edgeCount; k++) {
+                    if (edges[k]->getFrom() == nodes[i] && edges[k]->getTo() == nodes[j] && edges[k]->getType() == "Train") {
+                        hasTrain = true;
+                        break;
+                    }
+                }
+
+                if (!hasTrain) {
+                    double dist = utility::haversine(nodes[i]->getLatitude(), nodes[i]->getLongitude(),
+                                                     nodes[j]->getLatitude(), nodes[j]->getLongitude());
+                    if (dist < 1.0) { //We walk
+                        edges[edgeCount++] = new Edge(nodes[i], nodes[j], "-", dist / 5.0, 0.0, "Walk");
+                    } else { //We drive
+                        edges[edgeCount++] = new Edge(nodes[i], nodes[j], "-", dist / 80.0, dist * 10.0, "Car");
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -149,6 +182,7 @@ void Dijkstra::dijkstra_algo(const Graph& graph, const string& input) {
                 if (trialEdge->getMarked() == 0 && currentDist < trialEdge->getDistance()) {
                     trialEdge->setDistance(currentDist);
                     trialEdge->setParent(graph.nodes[ix]);
+                    trialEdge->setParentEdge(graph.edges[j]);
 
                     double timeSpent = graph.nodes[ix]->getIncomingDuration() + graph.edges[j]->getDuration();
                     trialEdge->setIncomingDuration(timeSpent);
@@ -173,8 +207,12 @@ void Dijkstra::reversed_output() const {
     double total_km{0};
     cout << " ";
     for (int i = markedNodeCount - 1; i >= 0; i--) {
-        cout << markedNodes[i]->getName(); if (i>0) {
-            cout << " -> ";
+        cout << markedNodes[i]->getName();
+        if (i > 0) {
+            Edge* routeEdge = markedNodes[i-1]->getParentEdge();
+            string transport = routeEdge ? routeEdge->getType() : "Unknown";
+
+            cout << " --(" << transport << ")--> ";
 
             double lat1 = markedNodes[i]->getLatitude();
             double lon1 = markedNodes[i]->getLongitude();
